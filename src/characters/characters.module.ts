@@ -1,9 +1,13 @@
+
 import { Module } from '@nestjs/common';
-import { CharactersService } from './services/characters/characters.service';
+import { HttpModule } from '@nestjs/axios';
 import { CharactersController } from './controllers/characters.controller';
+import { MarvelApiService } from './class/MarvelApiService';
+import { CharactersService } from './services/characters/characters.service';
 
 @Module({
-  providers: [CharactersService],
-  controllers: [CharactersController]
+  imports: [HttpModule],
+  controllers: [CharactersController],
+  providers: [CharactersService, MarvelApiService],
 })
 export class CharactersModule {}
