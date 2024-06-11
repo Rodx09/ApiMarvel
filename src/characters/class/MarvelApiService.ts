@@ -45,5 +45,46 @@ export class MarvelApiService {
     );
   }
 
+  getCharacterById(id: string): Observable<any> {
+    const timestamp = new Date().getTime();
+    const hash = crypto
+      .createHash('md5')
+      .update(timestamp + this.privateKey + this.apiKey)
+      .digest('hex');
+
+    const url = `${this.baseUrl}/characters/${id}?ts=${timestamp}&apikey=${this.apiKey}&hash=${hash}`;
+    
+    return this.httpService.get(url).pipe(
+      map((response: AxiosResponse) => {
+        if (response.status !== 200) {
+          throw new HttpException(
+            {
+              statusCode: response.status,
+              message: 'Error al obtener datos de la API de Marvel',
+              error: 'Bad Request',
+            },
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        const character = response.data.data.results[0];
+
+        return {
+          type: 'Success',
+          action: 'CONTINUE',
+          data: {
+            id: character.id,
+            name: character.name,
+            description: character.description,
+            image: `${character.thumbnail.path}.${character.thumbnail.extension}`,
+            comics: character.comics.items.map((comic: any) => ({
+              name: comic.name
+            }))
+          },
+        };
+      }),
+    );
+  }
+
 
 }

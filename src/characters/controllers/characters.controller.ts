@@ -1,4 +1,3 @@
-// src/characters/characters.controller.ts
 import { Controller, Get, Query, Param, BadRequestException, NotFoundException } from '@nestjs/common';
 import { CharactersService } from '../services/characters/characters.service';
 
@@ -9,10 +8,28 @@ export class CharactersController {
 
   @Get()
   async getCharacters() {
-   
-
-
     return await this.charactersService.getCharacters();
   }
 
+  @Get(':id')
+  async getCharacterById(@Param('id') id: string) {
+    if (!id) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'El parámetro "id" es requerido.',
+        error: 'Bad Request',
+      });
+    }
+
+    const character = await this.charactersService.getCharacterById(id);
+    if (!character) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: `Personaje con id ${id} no encontrado.`,
+        error: 'Not Found',
+      });
+    }
+
+    return character;
+  }
 }

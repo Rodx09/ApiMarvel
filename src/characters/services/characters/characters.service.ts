@@ -1,4 +1,3 @@
-// src/characters/characters.service.ts
 import { Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -19,6 +18,10 @@ export class CharactersService {
         },
       })),
     );
+  }
+
+  async getCharacterById(id: string): Promise<any> {
+    return await this.marvelApiService.getCharacterById(id).toPromise();
   }
 
 
