@@ -7,8 +7,18 @@ export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 
   @Get()
-  async getCharacters() {
-    return await this.charactersService.getCharacters();
+  async getCharacters(@Query('limit') limit: string) {
+    const limitNumber = parseInt(limit, 10);
+
+    if (isNaN(limitNumber) || limitNumber < 1 || limitNumber > 100) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'El parámetro "limit" debe estar entre 1 y 100.',
+        error: 'Bad Request',
+      });
+    }
+
+    return await this.charactersService.getCharacters(limitNumber);
   }
 
   @Get(':id')

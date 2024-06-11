@@ -7,8 +7,8 @@ import { MarvelApiService } from 'src/characters/class/MarvelApiService';
 export class CharactersService {
   constructor(private readonly marvelApiService: MarvelApiService) {}
 
-  getCharacters(): Observable<any> {
-    return this.marvelApiService.getCharacters().pipe(
+  getCharacters(limit: number): Observable<any> {
+    return this.marvelApiService.getCharacters(limit).pipe(
       map(characters => ({
         type: 'Success',
         action: 'CONTINUE',

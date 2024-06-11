@@ -13,13 +13,13 @@ export class MarvelApiService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  getCharacters(): Observable<any> {
+  getCharacters(limit: number): Observable<any> {
     const hash = crypto
       .createHash('md5')
       .update(1 + this.privateKey + this.apiKey)
       .digest('hex');
 
-    const url = `${this.baseUrl}/characters?&ts=1&apikey=${this.apiKey}&hash=${hash}`;
+    const url = `${this.baseUrl}/characters?limit=${limit}&ts=1&apikey=${this.apiKey}&hash=${hash}`;
 
     return this.httpService.get(url).pipe(
       map((response: AxiosResponse) => {
